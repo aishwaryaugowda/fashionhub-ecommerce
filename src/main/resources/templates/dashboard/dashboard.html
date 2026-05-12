@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard — FashionHub</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap"
+        rel="stylesheet" />
+
+    <style>
+        :root {
+            --primary: #1a1a2e;
+            --accent: #e94560;
+            --surface: #16213e;
+            --card-bg: #0f3460;
+            --text-light: #f0f0f0;
+            --muted: #a0aec0;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--primary);
+            font-family: 'DM Sans', sans-serif;
+            color: var(--text-light);
+            min-height: 100vh;
+        }
+
+        /* ── Page Header ── */
+        .page-header {
+            background: linear-gradient(135deg, var(--surface) 0%, var(--card-bg) 100%);
+            border-bottom: 3px solid var(--accent);
+            padding: 2.5rem 0 2rem;
+        }
+
+        .page-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.4rem;
+            letter-spacing: -0.5px;
+        }
+
+        .page-header h1 span {
+            color: var(--accent);
+        }
+
+        .page-header p {
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+
+        /* ── Stat Cards ── */
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid rgba(233, 69, 96, 0.15);
+            border-radius: 16px;
+            padding: 1.75rem 1.5rem;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+            animation: fadeUp 0.45s ease both;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 36px rgba(0, 0, 0, 0.4);
+        }
+
+        .stat-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-icon.products {
+            background: rgba(233, 69, 96, 0.15);
+            color: var(--accent);
+        }
+
+        .stat-icon.categories {
+            background: rgba(99, 179, 237, 0.15);
+            color: #90cdf4;
+        }
+
+        .stat-icon.lowstock {
+            background: rgba(251, 191, 36, 0.15);
+            color: #fcd34d;
+        }
+
+        .stat-value {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.6rem;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 0.3rem;
+        }
+
+        .stat-label {
+            color: var(--muted);
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+        }
+
+        /* ── Section Title ── */
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            color: var(--accent);
+            border-bottom: 1px solid rgba(233, 69, 96, 0.2);
+            padding-bottom: 0.6rem;
+            margin-bottom: 1.4rem;
+        }
+
+        /* ── Nav Action Cards ── */
+        .nav-card {
+            background: var(--surface);
+            border: 1px solid rgba(233, 69, 96, 0.15);
+            border-radius: 14px;
+            padding: 1.5rem 1.25rem;
+            text-decoration: none;
+            color: var(--text-light);
+            display: block;
+            transition: all 0.22s;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+            animation: fadeUp 0.45s ease both;
+        }
+
+        .nav-card:hover {
+            background: var(--card-bg);
+            border-color: var(--accent);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(233, 69, 96, 0.18);
+            color: var(--text-light);
+        }
+
+        .nav-card-icon {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .nav-card-icon.red {
+            color: var(--accent);
+        }
+
+        .nav-card-icon.blue {
+            color: #90cdf4;
+        }
+
+        .nav-card h5 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.05rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .nav-card p {
+            color: var(--muted);
+            font-size: 0.82rem;
+            margin: 0;
+        }
+
+        /* ── Welcome Banner ── */
+        .welcome-banner {
+            background: linear-gradient(135deg, var(--surface) 0%, #1a2a4a 100%);
+            border: 1px solid rgba(233, 69, 96, 0.12);
+            border-left: 4px solid var(--accent);
+            border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 2rem;
+            animation: fadeUp 0.35s ease both;
+        }
+
+        .welcome-banner h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.15rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .welcome-banner p {
+            color: var(--muted);
+            font-size: 0.88rem;
+            margin: 0;
+        }
+
+        /* ── Fade-in ── */
+        .fade-in {
+            animation: fadeUp 0.45s ease both;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(14px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Stagger delays for stat cards */
+        .stat-delay-1 {
+            animation-delay: 0.05s;
+        }
+
+        .stat-delay-2 {
+            animation-delay: 0.12s;
+        }
+
+        .stat-delay-3 {
+            animation-delay: 0.19s;
+        }
+
+        .nav-delay-1 {
+            animation-delay: 0.25s;
+        }
+
+        .nav-delay-2 {
+            animation-delay: 0.32s;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ── Navbar Fragment ── -->
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+    <!-- ── Page Header ── -->
+    <div class="page-header">
+        <div class="container">
+            <h1><span>Admin</span> Dashboard</h1>
+            <p class="mb-0">
+                <i class="bi bi-house-door me-1"></i>
+                <span style="color:var(--accent);">Home</span>
+                <span class="mx-2" style="color:var(--muted);">/</span>
+                <span style="color:var(--muted);">Dashboard</span>
+            </p>
+        </div>
+    </div>
+
+    <!-- ── Main Content ── -->
+    <div class="container py-4">
+
+        <!-- Welcome Banner -->
+        <div class="welcome-banner">
+            <h4><i class="bi bi-person-check me-2" style="color:var(--accent);"></i>Welcome back, <span
+                    style="color:var(--accent);">Aishwarya</span>!</h4>
+            <p>Here's a quick overview of your FashionHub store.</p>
+        </div>
+
+        <!-- ── Stats Row ── -->
+        <div class="row g-4 mb-4">
+
+            <!-- Total Products -->
+            <div class="col-md-4">
+                <div class="stat-card stat-delay-1">
+                    <div class="stat-icon products">
+                        <i class="bi bi-box-seam"></i>
+                    </div>
+                    <div class="stat-value" th:text="${totalProducts}">0</div>
+                    <div class="stat-label">Total Products</div>
+                </div>
+            </div>
+
+            <!-- Total Categories -->
+            <div class="col-md-4">
+                <div class="stat-card stat-delay-2">
+                    <div class="stat-icon categories">
+                        <i class="bi bi-tags"></i>
+                    </div>
+                    <div class="stat-value" th:text="${totalCategories}">0</div>
+                    <div class="stat-label">Total Categories</div>
+                </div>
+            </div>
+
+            <!-- Low Stock -->
+            <div class="col-md-4">
+                <div class="stat-card stat-delay-3">
+                    <div class="stat-icon lowstock">
+                        <i class="bi bi-exclamation-triangle"></i>
+                    </div>
+                    <div class="stat-value" th:text="${lowStockCount}">0</div>
+                    <div class="stat-label">Low Stock Products</div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ── Quick Navigation ── -->
+        <div class="section-title">
+            <i class="bi bi-grid me-2"></i>Quick Navigation
+        </div>
+
+        <div class="row g-4">
+
+            <!-- Manage Products -->
+            <div class="col-md-6">
+                <a th:href="@{/products}" class="nav-card nav-delay-1">
+                    <div class="nav-card-icon red">
+                        <i class="bi bi-box-seam-fill"></i>
+                    </div>
+                    <h5>Manage Products</h5>
+                    <p>Add, edit, or remove products from your store inventory.</p>
+                </a>
+            </div>
+
+            <!-- Manage Categories -->
+            <div class="col-md-6">
+                <a th:href="@{/categories}" class="nav-card nav-delay-2">
+                    <div class="nav-card-icon blue">
+                        <i class="bi bi-tags-fill"></i>
+                    </div>
+                    <h5>Manage Categories</h5>
+                    <p>Organise your product catalogue with categories.</p>
+                </a>
+            </div>
+
+        </div>
+
+    </div><!-- /container -->
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
