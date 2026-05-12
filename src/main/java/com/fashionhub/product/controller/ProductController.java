@@ -5,6 +5,8 @@ import com.fashionhub.category.service.CategoryService;
 import com.fashionhub.product.entity.Product;
 import com.fashionhub.product.service.ProductService;
 
+import jakarta.validation.Valid;
+import org.springframework.validation.BindingResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -60,23 +62,31 @@ public class ProductController {
     // ─── 2. SAVE NEW PRODUCT ──────────────────────────────────────
     @PostMapping("/save")
     public String saveProduct(
-            @ModelAttribute("product") Product product,
+            @Valid @ModelAttribute("product") Product product,
+            BindingResult result,
             @RequestParam("categoryId") Long categoryId,
+            Model model,
             RedirectAttributes redirectAttributes) {
 
-        if (productService.isProductNameExists(product.getName())) {
-            redirectAttributes.addFlashAttribute("errorMessage",
-                    "Product '" + product.getName() + "' already exists!");
-            return "redirect:/products";
+        // Custom validation: Duplicate Name Check
+        if (product.getName() != null && productService.isProductNameExists(product.getName())) {
+            result.rejectValue("name", "error.product", "Product '" + product.getName() + "' already exists!");
+        }
+
+        if (result.hasErrors()) {
+            model.addAttribute("products", productService.getAllProducts());
+            model.addAttribute("categories", categoryService.getAllCategories());
+            return "product/product-list";
         }
 
         try {
             Category category = categoryService.getCategoryById(categoryId);
             product.setCategory(category);
         } catch (RuntimeException e) {
-            redirectAttributes.addFlashAttribute("errorMessage",
-                    "Invalid category selected. Please try again.");
-            return "redirect:/products";
+            model.addAttribute("errorMessage", "Invalid category selected. Please try again.");
+            model.addAttribute("products", productService.getAllProducts());
+            model.addAttribute("categories", categoryService.getAllCategories());
+            return "product/product-list";
         }
 
         productService.saveProduct(product);
@@ -134,14 +144,19 @@ public class ProductController {
         return "product/product-edit";
     }
 
-    // ════════════════════════════════════════════════════════════════
     // ─── 5. PROCESS EDIT FORM ── POST /products/update ───────────
-    // ════════════════════════════════════════════════════════════════
     @PostMapping("/update")
     public String updateProduct(
-            @ModelAttribute("product") Product product,
+            @Valid @ModelAttribute("product") Product product,
+            BindingResult result,
             @RequestParam("categoryId") Long categoryId,
+            Model model,
             RedirectAttributes redirectAttributes) {
+
+        if (result.hasErrors()) {
+            model.addAttribute("categories", categoryService.getAllCategories());
+            return "product/product-edit";
+        }
 
         // Step 1 — Validate product ID exists in DB (prevent ghost updates)
         try {
@@ -157,9 +172,9 @@ public class ProductController {
             Category category = categoryService.getCategoryById(categoryId);
             product.setCategory(category);
         } catch (RuntimeException e) {
-            redirectAttributes.addFlashAttribute("errorMessage",
-                    "Update failed. Invalid category selected.");
-            return "redirect:/products";
+            model.addAttribute("errorMessage", "Update failed. Invalid category selected.");
+            model.addAttribute("categories", categoryService.getAllCategories());
+            return "product/product-edit";
         }
 
         // Step 3 — Save (JPA detects existing ID → runs UPDATE, not INSERT)

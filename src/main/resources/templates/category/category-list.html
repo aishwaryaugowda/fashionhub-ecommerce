@@ -2,28 +2,32 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Categories — FashionHub</title>
 
   <!-- Bootstrap 5 CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <!-- Bootstrap Icons -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet" />
 
   <style>
     :root {
-      --primary:   #1a1a2e;
-      --accent:    #e94560;
-      --surface:   #16213e;
-      --card-bg:   #0f3460;
-      --text-light:#f0f0f0;
-      --muted:     #a0aec0;
+      --primary: #1a1a2e;
+      --accent: #e94560;
+      --surface: #16213e;
+      --card-bg: #0f3460;
+      --text-light: #f0f0f0;
+      --muted: #a0aec0;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       background: var(--primary);
@@ -45,7 +49,9 @@
       letter-spacing: -0.5px;
     }
 
-    .page-header h1 span { color: var(--accent); }
+    .page-header h1 span {
+      color: var(--accent);
+    }
 
     .page-header p {
       color: var(--muted);
@@ -57,7 +63,7 @@
       background: var(--surface);
       border: 1px solid rgba(233, 69, 96, 0.15);
       border-radius: 14px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
       transition: box-shadow 0.3s ease;
     }
 
@@ -69,27 +75,31 @@
       font-family: 'Playfair Display', serif;
       font-size: 1.15rem;
       color: var(--accent);
-      border-bottom: 1px solid rgba(233,69,96,0.2);
+      border-bottom: 1px solid rgba(233, 69, 96, 0.2);
       padding-bottom: 0.75rem;
       margin-bottom: 1.25rem;
     }
 
     /* ── Form Controls ── */
-    .form-control, .form-select {
+    .form-control,
+    .form-select {
       background: var(--card-bg) !important;
-      border: 1px solid rgba(255,255,255,0.1) !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
       color: var(--text-light) !important;
       border-radius: 8px;
       padding: 0.6rem 1rem;
       transition: border-color 0.2s, box-shadow 0.2s;
     }
 
-    .form-control:focus, .form-select:focus {
+    .form-control:focus,
+    .form-select:focus {
       border-color: var(--accent) !important;
-      box-shadow: 0 0 0 3px rgba(233,69,96,0.18) !important;
+      box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.18) !important;
     }
 
-    .form-control::placeholder { color: var(--muted); }
+    .form-control::placeholder {
+      color: var(--muted);
+    }
 
     .form-label {
       color: var(--muted);
@@ -118,7 +128,7 @@
 
     .btn-delete {
       background: transparent;
-      border: 1px solid rgba(233,69,96,0.4);
+      border: 1px solid rgba(233, 69, 96, 0.4);
       color: var(--accent);
       border-radius: 7px;
       padding: 0.3rem 0.75rem;
@@ -150,15 +160,22 @@
       padding: 0.85rem 1rem;
     }
 
-    .fashionhub-table thead th:first-child { border-radius: 8px 0 0 8px; }
-    .fashionhub-table thead th:last-child  { border-radius: 0 8px 8px 0; }
+    .fashionhub-table thead th:first-child {
+      border-radius: 8px 0 0 8px;
+    }
+
+    .fashionhub-table thead th:last-child {
+      border-radius: 0 8px 8px 0;
+    }
 
     .fashionhub-table tbody tr {
       background: var(--card-bg);
       transition: background 0.2s;
     }
 
-    .fashionhub-table tbody tr:hover { background: #153a6b; }
+    .fashionhub-table tbody tr:hover {
+      background: #153a6b;
+    }
 
     .fashionhub-table tbody td {
       border: none;
@@ -167,12 +184,17 @@
       font-size: 0.93rem;
     }
 
-    .fashionhub-table tbody td:first-child { border-radius: 8px 0 0 8px; }
-    .fashionhub-table tbody td:last-child  { border-radius: 0 8px 8px 0; }
+    .fashionhub-table tbody td:first-child {
+      border-radius: 8px 0 0 8px;
+    }
+
+    .fashionhub-table tbody td:last-child {
+      border-radius: 0 8px 8px 0;
+    }
 
     /* ── Badge ── */
     .id-badge {
-      background: rgba(233,69,96,0.15);
+      background: rgba(233, 69, 96, 0.15);
       color: var(--accent);
       border-radius: 6px;
       padding: 2px 10px;
@@ -187,19 +209,24 @@
       color: var(--muted);
     }
 
-    .empty-state i { font-size: 3rem; opacity: 0.4; display: block; margin-bottom: 1rem; }
+    .empty-state i {
+      font-size: 3rem;
+      opacity: 0.4;
+      display: block;
+      margin-bottom: 1rem;
+    }
 
     /* ── Alert overrides ── */
     .alert-success-custom {
-      background: rgba(34,197,94,0.12);
-      border: 1px solid rgba(34,197,94,0.3);
+      background: rgba(34, 197, 94, 0.12);
+      border: 1px solid rgba(34, 197, 94, 0.3);
       color: #86efac;
       border-radius: 10px;
     }
 
     .alert-error-custom {
-      background: rgba(233,69,96,0.12);
-      border: 1px solid rgba(233,69,96,0.3);
+      background: rgba(233, 69, 96, 0.12);
+      border: 1px solid rgba(233, 69, 96, 0.3);
       color: #fca5a5;
       border-radius: 10px;
     }
@@ -220,8 +247,15 @@
     }
 
     @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(16px); }
-      to   { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
   </style>
 </head>
@@ -248,15 +282,14 @@
   <div class="container py-4">
 
     <!-- Flash Messages -->
-    <div th:if="${successMessage}"
-         class="alert alert-success-custom alert-dismissible fade show fade-in mb-4" role="alert">
+    <div th:if="${successMessage}" class="alert alert-success-custom alert-dismissible fade show fade-in mb-4"
+      role="alert">
       <i class="bi bi-check-circle-fill me-2"></i>
       <span th:text="${successMessage}"></span>
       <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"></button>
     </div>
 
-    <div th:if="${errorMessage}"
-         class="alert alert-error-custom alert-dismissible fade show fade-in mb-4" role="alert">
+    <div th:if="${errorMessage}" class="alert alert-error-custom alert-dismissible fade show fade-in mb-4" role="alert">
       <i class="bi bi-exclamation-triangle-fill me-2"></i>
       <span th:text="${errorMessage}"></span>
       <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"></button>
@@ -275,21 +308,18 @@
 
             <div class="mb-3">
               <label for="name" class="form-label">Category Name *</label>
-              <input type="text"
-                     id="name"
-                     th:field="*{name}"
-                     class="form-control"
-                     placeholder="e.g. Tops, Dresses..."
-                     required/>
+              <input type="text" id="name" th:field="*{name}" class="form-control"
+                th:classappend="${#fields.hasErrors('name')} ? 'is-invalid' : ''" placeholder="e.g. Tops, Dresses..." />
+              <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
             </div>
 
             <div class="mb-4">
               <label for="description" class="form-label">Description</label>
-              <textarea id="description"
-                        th:field="*{description}"
-                        class="form-control"
-                        rows="3"
-                        placeholder="Brief description of this category..."></textarea>
+              <textarea id="description" th:field="*{description}" class="form-control"
+                th:classappend="${#fields.hasErrors('description')} ? 'is-invalid' : ''" rows="3"
+                placeholder="Brief description of this category..."></textarea>
+              <div class="invalid-feedback" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">
+              </div>
             </div>
 
             <button type="submit" class="btn btn-accent w-100">
@@ -329,14 +359,12 @@
                     </td>
                     <td>
                       <span th:text="${cat.description != null and !cat.description.isEmpty()}
-                                     ? cat.description : '—'"
-                            style="color:var(--muted); font-size:0.88rem;">
+                                     ? cat.description : '—'" style="color:var(--muted); font-size:0.88rem;">
                       </span>
                     </td>
                     <td class="text-center">
-                      <a th:href="@{/categories/delete/{id}(id=${cat.id})}"
-                         class="btn btn-delete"
-                         onclick="return confirm('Delete \'' + /*[[${cat.name}]]*/ '' + '\'?')">
+                      <a th:href="@{/categories/delete/{id}(id=${cat.id})}" class="btn btn-delete"
+                        onclick="return confirm('Delete \'' + /*[[${cat.name}]]*/ '' + '\'?')">
                         <i class="bi bi-trash3 me-1"></i>Delete
                       </a>
                     </td>
@@ -363,4 +391,5 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
+
 </html>

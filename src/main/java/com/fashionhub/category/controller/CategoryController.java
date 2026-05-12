@@ -3,6 +3,8 @@ package com.fashionhub.category.controller;
 import com.fashionhub.category.entity.Category;
 import com.fashionhub.category.service.CategoryService;
 
+import jakarta.validation.Valid;
+import org.springframework.validation.BindingResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,25 +36,26 @@ public class CategoryController {
     // Save category
     @PostMapping("/save")
     public String saveCategory(
-            @ModelAttribute("category") Category category,
+            @Valid @ModelAttribute("category") Category category,
+            BindingResult result,
+            Model model,
             RedirectAttributes redirectAttributes) {
 
-        if (categoryService.isCategoryNameExists(category.getName())) {
+        // Custom duplicate check
+        if (category.getName() != null && categoryService.isCategoryNameExists(category.getName())) {
+            result.rejectValue("name", "error.category", "Category '" + category.getName() + "' already exists!");
+        }
 
-            redirectAttributes.addFlashAttribute(
-                    "errorMessage",
-                    "Category already exists!"
-            );
-
-            return "redirect:/categories";
+        if (result.hasErrors()) {
+            model.addAttribute("categories", categoryService.getAllCategories());
+            return "category/category-list";
         }
 
         categoryService.saveCategory(category);
 
         redirectAttributes.addFlashAttribute(
                 "successMessage",
-                "Category added successfully!"
-        );
+                "Category added successfully!");
 
         return "redirect:/categories";
     }
@@ -67,8 +70,7 @@ public class CategoryController {
 
         redirectAttributes.addFlashAttribute(
                 "successMessage",
-                "Category deleted successfully!"
-        );
+                "Category deleted successfully!");
 
         return "redirect:/categories";
     }

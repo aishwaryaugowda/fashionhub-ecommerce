@@ -435,52 +435,46 @@
           -->
           <form th:action="@{/products/save}" th:object="${product}" method="post">
 
-            <!-- Name -->
             <div class="mb-3">
               <label class="form-label">Product Name *</label>
-              <input type="text" th:field="*{name}" class="form-control" placeholder="e.g. Cotton T-Shirt" required />
+              <input type="text" th:field="*{name}" class="form-control"
+                th:classappend="${#fields.hasErrors('name')} ? 'is-invalid' : ''" placeholder="Enter product name" />
+              <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
             </div>
 
-            <!-- Description -->
             <div class="mb-3">
               <label class="form-label">Description</label>
-              <textarea th:field="*{description}" class="form-control" rows="2"
-                placeholder="Brief product description..."></textarea>
+              <textarea th:field="*{description}" class="form-control"
+                th:classappend="${#fields.hasErrors('description')} ? 'is-invalid' : ''" rows="2"
+                placeholder="Short description..."></textarea>
+              <div class="invalid-feedback" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">
+              </div>
             </div>
 
-            <!-- Price -->
             <div class="mb-3">
               <label class="form-label">Price (₹) *</label>
-              <input type="number" th:field="*{price}" class="form-control" placeholder="e.g. 1299.00" step="0.01"
-                min="0" required />
+              <input type="number" th:field="*{price}" class="form-control"
+                th:classappend="${#fields.hasErrors('price')} ? 'is-invalid' : ''" step="0.01" placeholder="0.00" />
+              <div class="invalid-feedback" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></div>
             </div>
 
-            <!-- Stock Quantity -->
             <div class="mb-3">
               <label class="form-label">Stock Quantity *</label>
-              <input type="number" th:field="*{stockQuantity}" class="form-control" placeholder="e.g. 50" min="0"
-                required />
+              <input type="number" th:field="*{stockQuantity}" class="form-control"
+                th:classappend="${#fields.hasErrors('stockQuantity')} ? 'is-invalid' : ''" placeholder="0" />
+              <div class="invalid-feedback" th:if="${#fields.hasErrors('stockQuantity')}" th:errors="*{stockQuantity}">
+              </div>
             </div>
 
-            <!-- Image URL -->
             <div class="mb-3">
               <label class="form-label">Image URL</label>
-              <input type="text" th:field="*{imageUrl}" class="form-control"
-                placeholder="https://example.com/image.jpg" />
+              <input type="text" th:field="*{imageUrl}" class="form-control" placeholder="https://... (optional)" />
             </div>
 
-            <!-- Category Dropdown -->
-            <!--
-              IMPORTANT: category is a related object — not a simple field.
-              We send categoryId as a plain Long, not th:field="*{category}".
-              The controller resolves the full Category object from this ID.
-            -->
             <!-- Category Dropdown -->
             <div class="mb-4">
               <label class="form-label">Category *</label>
-
               <select name="categoryId" class="form-select" required>
-
                 <option value="">— Select Category —</option>
 
                 <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.name}">
