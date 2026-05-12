@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+  <meta charset="UTF-8"/>
+  <title>Edit Product — FashionHub</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <!-- Re-use the same <style> block from product-list.html -->
+</head>
+
+<body>
+
+  <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+  <div class="page-header">
+    <div class="container">
+      <h1><span>Edit</span> Product</h1>
+      <p class="mb-0">
+        <a th:href="@{/}" style="color:var(--muted);text-decoration:none;">Home</a>
+        <span class="mx-2" style="color:var(--muted);">/</span>
+        <a th:href="@{/products}" style="color:var(--muted);text-decoration:none;">Products</a>
+        <span class="mx-2" style="color:var(--muted);">/</span>
+        <span style="color:var(--accent);">Edit</span>
+      </p>
+    </div>
+  </div>
+
+  <div class="container py-4">
+    <div class="row justify-content-center">
+      <div class="col-lg-6">
+        <div class="fh-card p-4 fade-in">
+
+          <div class="card-title-accent">
+            <i class="bi bi-pencil-square me-2"></i>
+            Edit: <span th:text="${product.name}"></span>
+          </div>
+
+          <!--
+            th:action → POST to /products/update
+            th:object → binds form to the existing Product object (pre-filled)
+            method    → POST
+          -->
+          <form th:action="@{/products/update}" th:object="${product}" method="post">
+
+            <!--
+              CRITICAL: hidden id field
+              Without this, the controller receives product.id = null
+              and JPA does an INSERT (new record) instead of UPDATE.
+            -->
+            <input type="hidden" th:field="*{id}"/>
+
+            <div class="mb-3">
+              <label class="form-label">Product Name *</label>
+              <input type="text"
+                     th:field="*{name}"
+                     class="form-control" required/>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Description</label>
+              <textarea th:field="*{description}"
+                        class="form-control" rows="2"></textarea>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Price (₹) *</label>
+              <input type="number"
+                     th:field="*{price}"
+                     class="form-control"
+                     step="0.01" min="0" required/>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Stock Quantity *</label>
+              <input type="number"
+                     th:field="*{stockQuantity}"
+                     class="form-control" min="0" required/>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Image URL</label>
+              <input type="text"
+                     th:field="*{imageUrl}"
+                     class="form-control"/>
+            </div>
+
+            <!-- Category Dropdown — pre-selects the product's current category -->
+            <!-- Category Dropdown -->
+<div class="mb-4">
+  <label class="form-label">Category *</label>
+
+  <select name="categoryId" class="form-select" required>
+
+    <option value="">— Select Category —</option>
+
+    <option th:each="cat : ${categories}"
+            th:value="${cat.id}"
+            th:text="${cat.name}"
+            th:selected="${cat.id == product.category.id}">
+    </option>
+
+  </select>
+</div>
+            <div class="d-flex gap-2">
+              <button type="submit" class="btn btn-accent flex-grow-1">
+                <i class="bi bi-check-lg me-2"></i>Update Product
+              </button>
+              <a th:href="@{/products}" class="btn btn-outline-secondary">
+                Cancel
+              </a>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

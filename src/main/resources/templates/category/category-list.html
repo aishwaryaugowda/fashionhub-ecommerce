@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Categories — FashionHub</title>
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+
+  <style>
+    :root {
+      --primary:   #1a1a2e;
+      --accent:    #e94560;
+      --surface:   #16213e;
+      --card-bg:   #0f3460;
+      --text-light:#f0f0f0;
+      --muted:     #a0aec0;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      background: var(--primary);
+      font-family: 'DM Sans', sans-serif;
+      color: var(--text-light);
+      min-height: 100vh;
+    }
+
+    /* ── Page Header ── */
+    .page-header {
+      background: linear-gradient(135deg, var(--surface) 0%, var(--card-bg) 100%);
+      border-bottom: 3px solid var(--accent);
+      padding: 2.5rem 0 2rem;
+    }
+
+    .page-header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.4rem;
+      letter-spacing: -0.5px;
+    }
+
+    .page-header h1 span { color: var(--accent); }
+
+    .page-header p {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    /* ── Cards ── */
+    .fashionhub-card {
+      background: var(--surface);
+      border: 1px solid rgba(233, 69, 96, 0.15);
+      border-radius: 14px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+      transition: box-shadow 0.3s ease;
+    }
+
+    .fashionhub-card:hover {
+      box-shadow: 0 8px 32px rgba(233, 69, 96, 0.12);
+    }
+
+    .card-title-accent {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      color: var(--accent);
+      border-bottom: 1px solid rgba(233,69,96,0.2);
+      padding-bottom: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    /* ── Form Controls ── */
+    .form-control, .form-select {
+      background: var(--card-bg) !important;
+      border: 1px solid rgba(255,255,255,0.1) !important;
+      color: var(--text-light) !important;
+      border-radius: 8px;
+      padding: 0.6rem 1rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-control:focus, .form-select:focus {
+      border-color: var(--accent) !important;
+      box-shadow: 0 0 0 3px rgba(233,69,96,0.18) !important;
+    }
+
+    .form-control::placeholder { color: var(--muted); }
+
+    .form-label {
+      color: var(--muted);
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+    }
+
+    /* ── Buttons ── */
+    .btn-accent {
+      background: var(--accent);
+      border: none;
+      color: white;
+      font-weight: 500;
+      border-radius: 8px;
+      padding: 0.55rem 1.4rem;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .btn-accent:hover {
+      background: #c73652;
+      color: white;
+      transform: translateY(-1px);
+    }
+
+    .btn-delete {
+      background: transparent;
+      border: 1px solid rgba(233,69,96,0.4);
+      color: var(--accent);
+      border-radius: 7px;
+      padding: 0.3rem 0.75rem;
+      font-size: 0.83rem;
+      transition: all 0.2s;
+    }
+
+    .btn-delete:hover {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    /* ── Table ── */
+    .fashionhub-table {
+      color: var(--text-light);
+      border-collapse: separate;
+      border-spacing: 0 6px;
+    }
+
+    .fashionhub-table thead th {
+      background: var(--card-bg);
+      color: var(--muted);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 500;
+      border: none;
+      padding: 0.85rem 1rem;
+    }
+
+    .fashionhub-table thead th:first-child { border-radius: 8px 0 0 8px; }
+    .fashionhub-table thead th:last-child  { border-radius: 0 8px 8px 0; }
+
+    .fashionhub-table tbody tr {
+      background: var(--card-bg);
+      transition: background 0.2s;
+    }
+
+    .fashionhub-table tbody tr:hover { background: #153a6b; }
+
+    .fashionhub-table tbody td {
+      border: none;
+      padding: 0.9rem 1rem;
+      vertical-align: middle;
+      font-size: 0.93rem;
+    }
+
+    .fashionhub-table tbody td:first-child { border-radius: 8px 0 0 8px; }
+    .fashionhub-table tbody td:last-child  { border-radius: 0 8px 8px 0; }
+
+    /* ── Badge ── */
+    .id-badge {
+      background: rgba(233,69,96,0.15);
+      color: var(--accent);
+      border-radius: 6px;
+      padding: 2px 10px;
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    /* ── Empty State ── */
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--muted);
+    }
+
+    .empty-state i { font-size: 3rem; opacity: 0.4; display: block; margin-bottom: 1rem; }
+
+    /* ── Alert overrides ── */
+    .alert-success-custom {
+      background: rgba(34,197,94,0.12);
+      border: 1px solid rgba(34,197,94,0.3);
+      color: #86efac;
+      border-radius: 10px;
+    }
+
+    .alert-error-custom {
+      background: rgba(233,69,96,0.12);
+      border: 1px solid rgba(233,69,96,0.3);
+      color: #fca5a5;
+      border-radius: 10px;
+    }
+
+    /* ── Count pill ── */
+    .count-pill {
+      background: var(--accent);
+      color: white;
+      border-radius: 20px;
+      padding: 2px 12px;
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    /* ── Fade-in animation ── */
+    .fade-in {
+      animation: fadeInUp 0.45s ease both;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ── Navbar Fragment ── -->
+  <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+  <!-- ── Page Header ── -->
+  <div class="page-header">
+    <div class="container">
+      <h1><span>Category</span> Management</h1>
+      <p class="mb-0">
+        <i class="bi bi-house-door me-1"></i>
+        <a th:href="@{/}" style="color:var(--muted); text-decoration:none;">Home</a>
+        <span class="mx-2" style="color:var(--muted);">/</span>
+        <span style="color:var(--accent);">Categories</span>
+      </p>
+    </div>
+  </div>
+
+  <!-- ── Main Content ── -->
+  <div class="container py-4">
+
+    <!-- Flash Messages -->
+    <div th:if="${successMessage}"
+         class="alert alert-success-custom alert-dismissible fade show fade-in mb-4" role="alert">
+      <i class="bi bi-check-circle-fill me-2"></i>
+      <span th:text="${successMessage}"></span>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"></button>
+    </div>
+
+    <div th:if="${errorMessage}"
+         class="alert alert-error-custom alert-dismissible fade show fade-in mb-4" role="alert">
+      <i class="bi bi-exclamation-triangle-fill me-2"></i>
+      <span th:text="${errorMessage}"></span>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"></button>
+    </div>
+
+    <div class="row g-4">
+
+      <!-- ── LEFT: Add Category Form ── -->
+      <div class="col-lg-4">
+        <div class="fashionhub-card p-4 fade-in">
+          <div class="card-title-accent">
+            <i class="bi bi-plus-circle me-2"></i>Add New Category
+          </div>
+
+          <form th:action="@{/categories/save}" th:object="${category}" method="post">
+
+            <div class="mb-3">
+              <label for="name" class="form-label">Category Name *</label>
+              <input type="text"
+                     id="name"
+                     th:field="*{name}"
+                     class="form-control"
+                     placeholder="e.g. Tops, Dresses..."
+                     required/>
+            </div>
+
+            <div class="mb-4">
+              <label for="description" class="form-label">Description</label>
+              <textarea id="description"
+                        th:field="*{description}"
+                        class="form-control"
+                        rows="3"
+                        placeholder="Brief description of this category..."></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-accent w-100">
+              <i class="bi bi-plus-lg me-2"></i>Add Category
+            </button>
+
+          </form>
+        </div>
+      </div>
+
+      <!-- ── RIGHT: Category List Table ── -->
+      <div class="col-lg-8">
+        <div class="fashionhub-card p-4 fade-in" style="animation-delay:0.1s">
+
+          <div class="d-flex justify-content-between align-items-center card-title-accent">
+            <span><i class="bi bi-tags me-2"></i>All Categories</span>
+            <span class="count-pill" th:text="${categories.size()} + ' total'"></span>
+          </div>
+
+          <!-- Populated Table -->
+          <div th:if="${not #lists.isEmpty(categories)}">
+            <div class="table-responsive">
+              <table class="table fashionhub-table">
+                <thead>
+                  <tr>
+                    <th>#ID</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th class="text-center">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr th:each="cat : ${categories}">
+                    <td><span class="id-badge" th:text="${cat.id}"></span></td>
+                    <td>
+                      <span class="fw-500" th:text="${cat.name}"></span>
+                    </td>
+                    <td>
+                      <span th:text="${cat.description != null and !cat.description.isEmpty()}
+                                     ? cat.description : '—'"
+                            style="color:var(--muted); font-size:0.88rem;">
+                      </span>
+                    </td>
+                    <td class="text-center">
+                      <a th:href="@{/categories/delete/{id}(id=${cat.id})}"
+                         class="btn btn-delete"
+                         onclick="return confirm('Delete \'' + /*[[${cat.name}]]*/ '' + '\'?')">
+                        <i class="bi bi-trash3 me-1"></i>Delete
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Empty State -->
+          <div th:if="${#lists.isEmpty(categories)}" class="empty-state">
+            <i class="bi bi-tags"></i>
+            <p class="mb-1 fw-500">No categories yet</p>
+            <small>Add your first category using the form on the left.</small>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Bootstrap 5 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
