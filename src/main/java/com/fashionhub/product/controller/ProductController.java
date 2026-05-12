@@ -26,9 +26,9 @@ public class ProductController {
     // ─── 1. LIST ALL PRODUCTS ─────────────────────────────────────
     @GetMapping
     public String listProducts(Model model) {
-        model.addAttribute("products",   productService.getAllProducts());
+        model.addAttribute("products", productService.getAllProducts());
         model.addAttribute("categories", categoryService.getAllCategories());
-        model.addAttribute("product",    new Product());
+        model.addAttribute("product", new Product());
         return "product/product-list";
     }
 
@@ -63,7 +63,7 @@ public class ProductController {
     // ─── 3. DELETE PRODUCT ────────────────────────────────────────
     @GetMapping("/delete/{id}")
     public String deleteProduct(
-            @PathVariable Long id,
+            @PathVariable("id") Long id,
             RedirectAttributes redirectAttributes) {
 
         try {
@@ -83,7 +83,7 @@ public class ProductController {
     // ════════════════════════════════════════════════════════════════
     @GetMapping("/edit/{id}")
     public String showEditForm(
-            @PathVariable Long id,
+            @PathVariable("id") Long id,
             Model model,
             RedirectAttributes redirectAttributes) {
 
@@ -102,7 +102,7 @@ public class ProductController {
         List<Category> categories = categoryService.getAllCategories();
 
         // Step 3 — Pass both to the view
-        model.addAttribute("product",    product);    // pre-fills all form fields
+        model.addAttribute("product", product); // pre-fills all form fields
         model.addAttribute("categories", categories); // populates the category dropdown
 
         // Step 4 — Return the edit view
