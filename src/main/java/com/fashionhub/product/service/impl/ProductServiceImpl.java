@@ -32,8 +32,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product getProductById(Long id) {
         return productRepository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException("Product not found with ID: " + id));
+                .orElseThrow(() -> new RuntimeException("Product not found with ID: " + id));
     }
 
     // Delete Product
@@ -64,5 +63,27 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public boolean isProductNameExists(String name) {
         return productRepository.existsByName(name);
+    }
+
+    // ─── Combined Search + Filter ────────────────────────────────────
+    // Uses Java stream predicates so every param is independently optional.
+    // Pass null (or blank string) to skip that filter entirely.
+    @Override
+    public List<Product> searchAndFilter(String keyword, Long categoryId,
+            BigDecimal minPrice, BigDecimal maxPrice) {
+
+        String kw = (keyword != null && !keyword.isBlank()) ? keyword.trim().toLowerCase() : null;
+
+        return productRepository.findAll().stream()
+                // keyword filter — case-insensitive name contains
+                .filter(p -> kw == null || p.getName().toLowerCase().contains(kw))
+                // category filter
+                .filter(p -> categoryId == null
+                        || (p.getCategory() != null && categoryId.equals(p.getCategory().getId())))
+                // min price filter
+                .filter(p -> minPrice == null || p.getPrice().compareTo(minPrice) >= 0)
+                // max price filter
+                .filter(p -> maxPrice == null || p.getPrice().compareTo(maxPrice) <= 0)
+                .collect(java.util.stream.Collectors.toList());
     }
 }

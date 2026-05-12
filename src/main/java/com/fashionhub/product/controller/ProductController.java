@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Controller
@@ -23,12 +24,36 @@ public class ProductController {
     @Autowired
     private CategoryService categoryService;
 
-    // ─── 1. LIST ALL PRODUCTS ─────────────────────────────────────
+    // ─── 1. LIST / SEARCH / FILTER PRODUCTS ──────────────────────
     @GetMapping
-    public String listProducts(Model model) {
-        model.addAttribute("products", productService.getAllProducts());
+    public String listProducts(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) Long categoryId,
+            @RequestParam(required = false) BigDecimal minPrice,
+            @RequestParam(required = false) BigDecimal maxPrice,
+            Model model) {
+
+        // Decide whether any filter is active
+        boolean hasFilter = (keyword != null && !keyword.isBlank())
+                || categoryId != null
+                || minPrice != null
+                || maxPrice != null;
+
+        List<Product> products = hasFilter
+                ? productService.searchAndFilter(keyword, categoryId, minPrice, maxPrice)
+                : productService.getAllProducts();
+
+        model.addAttribute("products", products);
         model.addAttribute("categories", categoryService.getAllCategories());
         model.addAttribute("product", new Product());
+
+        // Echo filter values back so the form stays filled after submit
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("categoryId", categoryId);
+        model.addAttribute("minPrice", minPrice);
+        model.addAttribute("maxPrice", maxPrice);
+        model.addAttribute("hasFilter", hasFilter);
+
         return "product/product-list";
     }
 

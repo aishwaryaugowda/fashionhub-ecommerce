@@ -30,4 +30,8 @@ public interface ProductService {
 
     // Check duplicate product name
     boolean isProductNameExists(String name);
+
+    // Combined search + filter — any param may be null to skip that filter
+    List<Product> searchAndFilter(String keyword, Long categoryId,
+            java.math.BigDecimal minPrice, java.math.BigDecimal maxPrice);
 }

@@ -11,15 +11,15 @@ import java.util.List;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    // Find products by category ID
-    List<Product> findByCategoryId(Long categoryId);
+        // Find products by category ID
+        List<Product> findByCategoryId(Long categoryId);
 
-    // Search by product name
-    List<Product> findByNameContainingIgnoreCase(String keyword);
+        // Search by product name
+        List<Product> findByNameContainingIgnoreCase(String keyword);
 
-    // Filter by price range
-    List<Product> findByPriceBetween(BigDecimal minPrice, BigDecimal maxPrice);
+        // Filter by price range
+        List<Product> findByPriceBetween(BigDecimal minPrice, BigDecimal maxPrice);
 
-    // Check duplicate product name
-    boolean existsByName(String name);
+        // Check duplicate product name
+        boolean existsByName(String name);
 }

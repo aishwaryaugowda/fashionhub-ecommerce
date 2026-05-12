@@ -2,25 +2,27 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Products — FashionHub</title>
 
   <!-- Bootstrap 5 CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <!-- Bootstrap Icons -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet" />
 
   <style>
     :root {
-      --primary:   #1a1a2e;
-      --accent:    #e94560;
-      --surface:   #16213e;
-      --card-bg:   #0f3460;
-      --text-light:#f0f0f0;
-      --muted:     #a0aec0;
+      --primary: #1a1a2e;
+      --accent: #e94560;
+      --surface: #16213e;
+      --card-bg: #0f3460;
+      --text-light: #f0f0f0;
+      --muted: #a0aec0;
     }
 
     body {
@@ -36,42 +38,62 @@
       border-bottom: 3px solid var(--accent);
       padding: 2.5rem 0 2rem;
     }
+
     .page-header h1 {
       font-family: 'Playfair Display', serif;
       font-size: 2.4rem;
     }
-    .page-header h1 span { color: var(--accent); }
-    .page-header p { color: var(--muted); font-size: 0.95rem; }
+
+    .page-header h1 span {
+      color: var(--accent);
+    }
+
+    .page-header p {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
 
     /* ── Cards ── */
     .fh-card {
       background: var(--surface);
-      border: 1px solid rgba(233,69,96,0.15);
+      border: 1px solid rgba(233, 69, 96, 0.15);
       border-radius: 14px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
     }
+
     .card-title-accent {
       font-family: 'Playfair Display', serif;
       font-size: 1.1rem;
       color: var(--accent);
-      border-bottom: 1px solid rgba(233,69,96,0.2);
+      border-bottom: 1px solid rgba(233, 69, 96, 0.2);
       padding-bottom: 0.75rem;
       margin-bottom: 1.25rem;
     }
 
     /* ── Form Controls ── */
-    .form-control, .form-select {
+    .form-control,
+    .form-select {
       background: var(--card-bg) !important;
-      border: 1px solid rgba(255,255,255,0.1) !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
       color: var(--text-light) !important;
       border-radius: 8px;
     }
-    .form-control:focus, .form-select:focus {
+
+    .form-control:focus,
+    .form-select:focus {
       border-color: var(--accent) !important;
-      box-shadow: 0 0 0 3px rgba(233,69,96,0.18) !important;
+      box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.18) !important;
     }
-    .form-control::placeholder { color: var(--muted); }
-    .form-select option { background: var(--card-bg); color: var(--text-light); }
+
+    .form-control::placeholder {
+      color: var(--muted);
+    }
+
+    .form-select option {
+      background: var(--card-bg);
+      color: var(--text-light);
+    }
+
     .form-label {
       color: var(--muted);
       font-size: 0.82rem;
@@ -90,33 +112,38 @@
       padding: 0.55rem 1.4rem;
       transition: background 0.2s, transform 0.15s;
     }
+
     .btn-accent:hover {
       background: #c73652;
       color: white;
       transform: translateY(-1px);
     }
+
     .btn-edit-sm {
       background: transparent;
-      border: 1px solid rgba(160,174,192,0.35);
+      border: 1px solid rgba(160, 174, 192, 0.35);
       color: var(--muted);
       border-radius: 6px;
       padding: 0.25rem 0.65rem;
       font-size: 0.78rem;
       transition: all 0.2s;
     }
+
     .btn-edit-sm:hover {
-      background: rgba(160,174,192,0.12);
+      background: rgba(160, 174, 192, 0.12);
       color: var(--text-light);
     }
+
     .btn-delete-sm {
       background: transparent;
-      border: 1px solid rgba(233,69,96,0.35);
+      border: 1px solid rgba(233, 69, 96, 0.35);
       color: var(--accent);
       border-radius: 6px;
       padding: 0.25rem 0.65rem;
       font-size: 0.78rem;
       transition: all 0.2s;
     }
+
     .btn-delete-sm:hover {
       background: var(--accent);
       color: white;
@@ -128,6 +155,7 @@
       border-collapse: separate;
       border-spacing: 0 5px;
     }
+
     .fh-table thead th {
       background: var(--card-bg);
       color: var(--muted);
@@ -138,52 +166,73 @@
       border: none;
       padding: 0.8rem 0.9rem;
     }
-    .fh-table thead th:first-child { border-radius: 8px 0 0 8px; }
-    .fh-table thead th:last-child  { border-radius: 0 8px 8px 0; }
+
+    .fh-table thead th:first-child {
+      border-radius: 8px 0 0 8px;
+    }
+
+    .fh-table thead th:last-child {
+      border-radius: 0 8px 8px 0;
+    }
+
     .fh-table tbody tr {
       background: var(--card-bg);
       transition: background 0.2s;
     }
-    .fh-table tbody tr:hover { background: #153a6b; }
+
+    .fh-table tbody tr:hover {
+      background: #153a6b;
+    }
+
     .fh-table tbody td {
       border: none;
       padding: 0.8rem 0.9rem;
       vertical-align: middle;
       font-size: 0.88rem;
     }
-    .fh-table tbody td:first-child { border-radius: 8px 0 0 8px; }
-    .fh-table tbody td:last-child  { border-radius: 0 8px 8px 0; }
+
+    .fh-table tbody td:first-child {
+      border-radius: 8px 0 0 8px;
+    }
+
+    .fh-table tbody td:last-child {
+      border-radius: 0 8px 8px 0;
+    }
 
     /* ── Badges ── */
     .id-badge {
-      background: rgba(233,69,96,0.15);
+      background: rgba(233, 69, 96, 0.15);
       color: var(--accent);
       border-radius: 5px;
       padding: 2px 9px;
       font-size: 0.78rem;
       font-weight: 600;
     }
+
     .cat-badge {
-      background: rgba(99,179,237,0.15);
+      background: rgba(99, 179, 237, 0.15);
       color: #90cdf4;
       border-radius: 5px;
       padding: 2px 9px;
       font-size: 0.78rem;
     }
+
     .stock-ok {
-      background: rgba(34,197,94,0.15);
+      background: rgba(34, 197, 94, 0.15);
       color: #86efac;
       border-radius: 5px;
       padding: 2px 9px;
       font-size: 0.78rem;
     }
+
     .stock-low {
-      background: rgba(233,69,96,0.15);
+      background: rgba(233, 69, 96, 0.15);
       color: #fca5a5;
       border-radius: 5px;
       padding: 2px 9px;
       font-size: 0.78rem;
     }
+
     .count-pill {
       background: var(--accent);
       color: white;
@@ -199,15 +248,16 @@
       height: 40px;
       border-radius: 8px;
       object-fit: cover;
-      border: 1px solid rgba(255,255,255,0.08);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       background: var(--primary);
     }
+
     .img-placeholder {
       width: 40px;
       height: 40px;
       border-radius: 8px;
       background: var(--primary);
-      border: 1px solid rgba(255,255,255,0.08);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -217,14 +267,15 @@
 
     /* ── Alerts ── */
     .alert-success-custom {
-      background: rgba(34,197,94,0.12);
-      border: 1px solid rgba(34,197,94,0.3);
+      background: rgba(34, 197, 94, 0.12);
+      border: 1px solid rgba(34, 197, 94, 0.3);
       color: #86efac;
       border-radius: 10px;
     }
+
     .alert-error-custom {
-      background: rgba(233,69,96,0.12);
-      border: 1px solid rgba(233,69,96,0.3);
+      background: rgba(233, 69, 96, 0.12);
+      border: 1px solid rgba(233, 69, 96, 0.3);
       color: #fca5a5;
       border-radius: 10px;
     }
@@ -235,6 +286,7 @@
       padding: 3rem 1rem;
       color: var(--muted);
     }
+
     .empty-state i {
       font-size: 3rem;
       opacity: 0.35;
@@ -243,10 +295,20 @@
     }
 
     /* ── Fade-in ── */
-    .fade-in { animation: fadeUp 0.45s ease both; }
+    .fade-in {
+      animation: fadeUp 0.45s ease both;
+    }
+
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(14px); }
-      to   { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
   </style>
 </head>
@@ -274,15 +336,13 @@
   <div class="container py-4">
 
     <!-- Flash Messages -->
-    <div th:if="${successMessage}"
-         class="alert alert-success-custom alert-dismissible fade show fade-in mb-4">
+    <div th:if="${successMessage}" class="alert alert-success-custom alert-dismissible fade show fade-in mb-4">
       <i class="bi bi-check-circle-fill me-2"></i>
       <span th:text="${successMessage}"></span>
       <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"></button>
     </div>
 
-    <div th:if="${errorMessage}"
-         class="alert alert-error-custom alert-dismissible fade show fade-in mb-4">
+    <div th:if="${errorMessage}" class="alert alert-error-custom alert-dismissible fade show fade-in mb-4">
       <i class="bi bi-exclamation-triangle-fill me-2"></i>
       <span th:text="${errorMessage}"></span>
       <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"></button>
@@ -290,7 +350,79 @@
 
     <div class="row g-4">
 
+      <!-- ── FILTER PANEL (full-width, above add-form + table) ── -->
+      <div class="col-12">
+        <div class="fh-card p-4 fade-in" style="animation-delay:0s;">
+
+          <div class="d-flex justify-content-between align-items-center card-title-accent">
+            <span><i class="bi bi-funnel me-2"></i>Search &amp; Filter Products</span>
+            <!-- Active-filter badge -->
+            <span th:if="${hasFilter}" class="count-pill">Filtered</span>
+          </div>
+
+          <!--
+            GET form — submits filter params as query strings to /products
+            All fields are optional; blank fields are simply ignored by the controller.
+          -->
+          <form th:action="@{/products}" method="get" class="row g-3 align-items-end">
+
+            <!-- Keyword search -->
+            <div class="col-lg-4 col-md-6">
+              <label class="form-label"><i class="bi bi-search me-1"></i>Search by Name</label>
+              <input type="text" name="keyword" class="form-control" placeholder="e.g. Cotton T-Shirt..."
+                th:value="${keyword}" />
+            </div>
+
+            <!-- Category filter -->
+            <div class="col-lg-3 col-md-6">
+              <label class="form-label"><i class="bi bi-tags me-1"></i>Category</label>
+              <select name="categoryId" class="form-select">
+                <option value="">— All Categories —</option>
+                <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.name}"
+                  th:selected="${cat.id == categoryId}">
+                </option>
+              </select>
+            </div>
+
+            <!-- Min price -->
+            <div class="col-lg-2 col-md-4">
+              <label class="form-label"><i class="bi bi-currency-rupee me-1"></i>Min Price</label>
+              <input type="number" name="minPrice" class="form-control" placeholder="e.g. 0" min="0" step="0.01"
+                th:value="${minPrice}" />
+            </div>
+
+            <!-- Max price -->
+            <div class="col-lg-2 col-md-4">
+              <label class="form-label"><i class="bi bi-currency-rupee me-1"></i>Max Price</label>
+              <input type="number" name="maxPrice" class="form-control" placeholder="e.g. 9999" min="0" step="0.01"
+                th:value="${maxPrice}" />
+            </div>
+
+            <!-- Buttons -->
+            <div class="col-lg-1 col-md-4 d-flex gap-2">
+              <button type="submit" class="btn btn-accent w-100">
+                <i class="bi bi-search"></i>
+              </button>
+              <!-- Clear button — only visible when a filter is active -->
+              <a th:if="${hasFilter}" th:href="@{/products}" class="btn w-100" title="Clear all filters" style="background:transparent;
+                        border:1px solid rgba(160,174,192,0.35);
+                        color:var(--muted);
+                        border-radius:8px;
+                        padding:0.55rem 0.6rem;
+                        text-align:center;
+                        transition:all 0.2s;"
+                onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--text-light)';"
+                onmouseout="this.style.borderColor='rgba(160,174,192,0.35)';this.style.color='var(--muted)';">
+                <i class="bi bi-x-lg"></i>
+              </a>
+            </div>
+
+          </form>
+        </div>
+      </div>
+
       <!-- ── LEFT: Add Product Form ── -->
+
       <div class="col-lg-4">
         <div class="fh-card p-4 fade-in">
           <div class="card-title-accent">
@@ -306,52 +438,35 @@
             <!-- Name -->
             <div class="mb-3">
               <label class="form-label">Product Name *</label>
-              <input type="text"
-                     th:field="*{name}"
-                     class="form-control"
-                     placeholder="e.g. Cotton T-Shirt"
-                     required/>
+              <input type="text" th:field="*{name}" class="form-control" placeholder="e.g. Cotton T-Shirt" required />
             </div>
 
             <!-- Description -->
             <div class="mb-3">
               <label class="form-label">Description</label>
-              <textarea th:field="*{description}"
-                        class="form-control"
-                        rows="2"
-                        placeholder="Brief product description..."></textarea>
+              <textarea th:field="*{description}" class="form-control" rows="2"
+                placeholder="Brief product description..."></textarea>
             </div>
 
             <!-- Price -->
             <div class="mb-3">
               <label class="form-label">Price (₹) *</label>
-              <input type="number"
-                     th:field="*{price}"
-                     class="form-control"
-                     placeholder="e.g. 1299.00"
-                     step="0.01"
-                     min="0"
-                     required/>
+              <input type="number" th:field="*{price}" class="form-control" placeholder="e.g. 1299.00" step="0.01"
+                min="0" required />
             </div>
 
             <!-- Stock Quantity -->
             <div class="mb-3">
               <label class="form-label">Stock Quantity *</label>
-              <input type="number"
-                     th:field="*{stockQuantity}"
-                     class="form-control"
-                     placeholder="e.g. 50"
-                     min="0"
-                     required/>
+              <input type="number" th:field="*{stockQuantity}" class="form-control" placeholder="e.g. 50" min="0"
+                required />
             </div>
 
             <!-- Image URL -->
             <div class="mb-3">
               <label class="form-label">Image URL</label>
-              <input type="text"
-                     th:field="*{imageUrl}"
-                     class="form-control"
-                     placeholder="https://example.com/image.jpg"/>
+              <input type="text" th:field="*{imageUrl}" class="form-control"
+                placeholder="https://example.com/image.jpg" />
             </div>
 
             <!-- Category Dropdown -->
@@ -361,20 +476,18 @@
               The controller resolves the full Category object from this ID.
             -->
             <!-- Category Dropdown -->
-<div class="mb-4">
-  <label class="form-label">Category *</label>
+            <div class="mb-4">
+              <label class="form-label">Category *</label>
 
-  <select name="categoryId" class="form-select" required>
+              <select name="categoryId" class="form-select" required>
 
-    <option value="">— Select Category —</option>
+                <option value="">— Select Category —</option>
 
-    <option th:each="cat : ${categories}"
-            th:value="${cat.id}"
-            th:text="${cat.name}">
-    </option>
+                <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.name}">
+                </option>
 
-  </select>
-</div>
+              </select>
+            </div>
 
             <button type="submit" class="btn btn-accent w-100">
               <i class="bi bi-plus-lg me-2"></i>Add Product
@@ -421,12 +534,9 @@
 
                     <!-- Image Thumbnail — shows image if URL exists, icon if not -->
                     <td>
-                      <img th:if="${prod.imageUrl != null and !prod.imageUrl.isEmpty()}"
-                           th:src="${prod.imageUrl}"
-                           class="img-thumb"
-                           alt="product image"/>
-                      <div th:if="${prod.imageUrl == null or prod.imageUrl.isEmpty()}"
-                           class="img-placeholder">
+                      <img th:if="${prod.imageUrl != null and !prod.imageUrl.isEmpty()}" th:src="${prod.imageUrl}"
+                        class="img-thumb" alt="product image" />
+                      <div th:if="${prod.imageUrl == null or prod.imageUrl.isEmpty()}" class="img-placeholder">
                         <i class="bi bi-image"></i>
                       </div>
                     </td>
@@ -436,8 +546,7 @@
 
                     <!-- Category — accesses the related Category object's name -->
                     <td>
-                      <span class="cat-badge"
-                            th:text="${prod.category.name}">
+                      <span class="cat-badge" th:text="${prod.category.name}">
                       </span>
                     </td>
 
@@ -446,33 +555,29 @@
 
                     <!-- Stock — green badge if > 5, red if <= 5 -->
                     <td>
-                      <span th:if="${prod.stockQuantity > 5}"
-                            class="stock-ok"
-                            th:text="${prod.stockQuantity} + ' in stock'">
+                      <span th:if="${prod.stockQuantity > 5}" class="stock-ok"
+                        th:text="${prod.stockQuantity} + ' in stock'">
                       </span>
-                      <span th:if="${prod.stockQuantity <= 5}"
-                            class="stock-low"
-                            th:text="${prod.stockQuantity} + ' low stock'">
+                      <span th:if="${prod.stockQuantity <= 5}" class="stock-low"
+                        th:text="${prod.stockQuantity} + ' low stock'">
                       </span>
                     </td>
 
                     <!-- Actions -->
-<td class="text-center">
+                    <td class="text-center">
 
-   <!-- Edit feature coming soon -->
-    <a th:href="@{/products/edit/{id}(id=${prod.id})}"
-   class="btn btn-edit-sm me-1">
-    <i class="bi bi-pencil me-1"></i>Edit
-</a>
+                      <!-- Edit feature coming soon -->
+                      <a th:href="@{/products/edit/{id}(id=${prod.id})}" class="btn btn-edit-sm me-1">
+                        <i class="bi bi-pencil me-1"></i>Edit
+                      </a>
 
-    <!-- Delete Button -->
-    <a th:href="@{/products/delete/{id}(id=${prod.id})}"
-       class="btn btn-delete-sm"
-       th:onclick="return confirm('Delete this product?')">
-        <i class="bi bi-trash3 me-1"></i>Delete
-    </a>
+                      <!-- Delete Button -->
+                      <a th:href="@{/products/delete/{id}(id=${prod.id})}" class="btn btn-delete-sm"
+                        th:onclick="return confirm('Delete this product?')">
+                        <i class="bi bi-trash3 me-1"></i>Delete
+                      </a>
 
-</td>
+                    </td>
 
                   </tr>
                 </tbody>
@@ -495,4 +600,5 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
