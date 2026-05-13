@@ -4,6 +4,7 @@ import com.fashionhub.category.entity.Category;
 import com.fashionhub.category.service.CategoryService;
 import com.fashionhub.product.entity.Product;
 import com.fashionhub.product.service.ProductService;
+import com.fashionhub.util.ProductImageUtil;
 
 import jakarta.validation.Valid;
 import org.springframework.validation.BindingResult;
@@ -29,10 +30,10 @@ public class ProductController {
     // ─── 1. LIST / SEARCH / FILTER PRODUCTS ──────────────────────
     @GetMapping
     public String listProducts(
-            @RequestParam(required = false) String keyword,
-            @RequestParam(required = false) Long categoryId,
-            @RequestParam(required = false) BigDecimal minPrice,
-            @RequestParam(required = false) BigDecimal maxPrice,
+            @RequestParam(name = "keyword", required = false) String keyword,
+            @RequestParam(name = "categoryId", required = false) Long categoryId,
+            @RequestParam(name = "minPrice", required = false) BigDecimal minPrice,
+            @RequestParam(name = "maxPrice", required = false) BigDecimal maxPrice,
             Model model) {
 
         // Decide whether any filter is active
@@ -56,6 +57,9 @@ public class ProductController {
         model.addAttribute("maxPrice", maxPrice);
         model.addAttribute("hasFilter", hasFilter);
 
+        // Add default image for UI fallbacks
+        model.addAttribute("defaultImageUrl", ProductImageUtil.FALLBACK_IMAGE);
+
         return "product/product-list";
     }
 
@@ -76,16 +80,22 @@ public class ProductController {
         if (result.hasErrors()) {
             model.addAttribute("products", productService.getAllProducts());
             model.addAttribute("categories", categoryService.getAllCategories());
+            model.addAttribute("defaultImageUrl", ProductImageUtil.FALLBACK_IMAGE);
             return "product/product-list";
         }
 
         try {
             Category category = categoryService.getCategoryById(categoryId);
             product.setCategory(category);
+
+            // Auto-assign image based on category and name
+            product.setImageUrl(ProductImageUtil.getImageUrl(category.getName(), product.getName()));
+
         } catch (RuntimeException e) {
             model.addAttribute("errorMessage", "Invalid category selected. Please try again.");
             model.addAttribute("products", productService.getAllProducts());
             model.addAttribute("categories", categoryService.getAllCategories());
+            model.addAttribute("defaultImageUrl", ProductImageUtil.FALLBACK_IMAGE);
             return "product/product-list";
         }
 
@@ -139,6 +149,7 @@ public class ProductController {
         // Step 3 — Pass both to the view
         model.addAttribute("product", product); // pre-fills all form fields
         model.addAttribute("categories", categories); // populates the category dropdown
+        model.addAttribute("defaultImageUrl", ProductImageUtil.FALLBACK_IMAGE);
 
         // Step 4 — Return the edit view
         return "product/product-edit";
@@ -155,6 +166,7 @@ public class ProductController {
 
         if (result.hasErrors()) {
             model.addAttribute("categories", categoryService.getAllCategories());
+            model.addAttribute("defaultImageUrl", ProductImageUtil.FALLBACK_IMAGE);
             return "product/product-edit";
         }
 
@@ -171,6 +183,10 @@ public class ProductController {
         try {
             Category category = categoryService.getCategoryById(categoryId);
             product.setCategory(category);
+
+            // Auto-update image based on (potentially new) category and name
+            product.setImageUrl(ProductImageUtil.getImageUrl(category.getName(), product.getName()));
+
         } catch (RuntimeException e) {
             model.addAttribute("errorMessage", "Update failed. Invalid category selected.");
             model.addAttribute("categories", categoryService.getAllCategories());

@@ -63,7 +63,7 @@ public class CategoryController {
     // Delete category
     @GetMapping("/delete/{id}")
     public String deleteCategory(
-            @PathVariable Long id,
+            @PathVariable("id") Long id,
             RedirectAttributes redirectAttributes) {
 
         categoryService.deleteCategoryById(id);

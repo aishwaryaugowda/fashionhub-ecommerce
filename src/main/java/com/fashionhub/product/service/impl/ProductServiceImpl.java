@@ -25,14 +25,18 @@ public class ProductServiceImpl implements ProductService {
     // Get All Products
     @Override
     public List<Product> getAllProducts() {
-        return productRepository.findAll();
+        List<Product> products = productRepository.findAll();
+        products.forEach(this::ensureProductImage);
+        return products;
     }
 
     // Get Product By ID
     @Override
     public Product getProductById(Long id) {
-        return productRepository.findById(id)
+        Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found with ID: " + id));
+        ensureProductImage(product);
+        return product;
     }
 
     // Delete Product
@@ -44,19 +48,25 @@ public class ProductServiceImpl implements ProductService {
     // Get Products By Category ID
     @Override
     public List<Product> getProductsByCategoryId(Long categoryId) {
-        return productRepository.findByCategoryId(categoryId);
+        List<Product> products = productRepository.findByCategoryId(categoryId);
+        products.forEach(this::ensureProductImage);
+        return products;
     }
 
     // Search Products
     @Override
     public List<Product> searchProducts(String keyword) {
-        return productRepository.findByNameContainingIgnoreCase(keyword);
+        List<Product> products = productRepository.findByNameContainingIgnoreCase(keyword);
+        products.forEach(this::ensureProductImage);
+        return products;
     }
 
     // Filter By Price Range
     @Override
     public List<Product> getProductsByPriceRange(BigDecimal min, BigDecimal max) {
-        return productRepository.findByPriceBetween(min, max);
+        List<Product> products = productRepository.findByPriceBetween(min, max);
+        products.forEach(this::ensureProductImage);
+        return products;
     }
 
     // Check Duplicate Product Name
@@ -74,7 +84,7 @@ public class ProductServiceImpl implements ProductService {
 
         String kw = (keyword != null && !keyword.isBlank()) ? keyword.trim().toLowerCase() : null;
 
-        return productRepository.findAll().stream()
+        List<Product> products = productRepository.findAll().stream()
                 // keyword filter — case-insensitive name contains
                 .filter(p -> kw == null || p.getName().toLowerCase().contains(kw))
                 // category filter
@@ -85,5 +95,28 @@ public class ProductServiceImpl implements ProductService {
                 // max price filter
                 .filter(p -> maxPrice == null || p.getPrice().compareTo(maxPrice) <= 0)
                 .collect(java.util.stream.Collectors.toList());
+
+        products.forEach(this::ensureProductImage);
+        return products;
     }
-}
+
+    /**
+     * Internal logic to automatically fix missing or incorrect image URLs for old records.
+     * This keeps the database clean and synced with ProductImageUtil logic.
+     */
+    private void ensureProductImage(Product product) {
+        String url = product.getImageUrl();
+        // If image is missing, empty, or an old internet URL (starts with http), 
+        // OR it's just the default placeholder, let's try to assign a better themed local image.
+        if (url == null || url.isBlank() || url.startsWith("http") || url.equals("/images/default.jpg")) {
+            String categoryName = (product.getCategory() != null) ? product.getCategory().getName() : "";
+            String newUrl = com.fashionhub.util.ProductImageUtil.getImageUrl(categoryName, product.getName());
+            
+            // Only update if it's actually different or if it was null/empty
+            if (url == null || !url.equals(newUrl)) {
+                product.setImageUrl(newUrl);
+                productRepository.save(product);
+            }
+        }
+    }
+}

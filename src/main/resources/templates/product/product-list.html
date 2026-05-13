@@ -244,25 +244,44 @@
 
     /* ── Image Thumbnail ── */
     .img-thumb {
-      width: 40px;
-      height: 40px;
-      border-radius: 8px;
+      width: 64px;
+      height: 64px;
+      border-radius: 12px;
       object-fit: cover;
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(233, 69, 96, 0.25);
       background: var(--primary);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      transition: transform 0.2s;
+    }
+
+    .img-thumb:hover {
+      transform: scale(1.08);
     }
 
     .img-placeholder {
-      width: 40px;
-      height: 40px;
-      border-radius: 8px;
+      width: 64px;
+      height: 64px;
+      border-radius: 10px;
       background: var(--primary);
       border: 1px solid rgba(255, 255, 255, 0.08);
       display: flex;
       align-items: center;
       justify-content: center;
       color: var(--muted);
-      font-size: 1rem;
+      font-size: 1.4rem;
+    }
+
+    /* ── Utilities ── */
+    .fw-500 {
+      font-weight: 500;
+    }
+
+    .text-accent {
+      color: var(--accent);
+    }
+
+    .mb-compact {
+      margin-bottom: 0.85rem;
     }
 
     /* ── Alerts ── */
@@ -434,59 +453,51 @@
             th:object   → binds this form to the empty Product object from controller
           -->
           <form th:action="@{/products/save}" th:object="${product}" method="post">
-
-            <div class="mb-3">
+            <div class="mb-compact">
               <label class="form-label">Product Name *</label>
-              <input type="text" th:field="*{name}" class="form-control"
+              <input type="text" th:field="*{name}" class="form-control form-control-sm"
                 th:classappend="${#fields.hasErrors('name')} ? 'is-invalid' : ''" placeholder="Enter product name" />
               <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
             </div>
 
-            <div class="mb-3">
+            <div class="mb-compact">
               <label class="form-label">Description</label>
-              <textarea th:field="*{description}" class="form-control"
+              <textarea th:field="*{description}" class="form-control form-control-sm"
                 th:classappend="${#fields.hasErrors('description')} ? 'is-invalid' : ''" rows="2"
                 placeholder="Short description..."></textarea>
               <div class="invalid-feedback" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">
               </div>
             </div>
 
-            <div class="mb-3">
-              <label class="form-label">Price (₹) *</label>
-              <input type="number" th:field="*{price}" class="form-control"
-                th:classappend="${#fields.hasErrors('price')} ? 'is-invalid' : ''" step="0.01" placeholder="0.00" />
-              <div class="invalid-feedback" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></div>
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label">Stock Quantity *</label>
-              <input type="number" th:field="*{stockQuantity}" class="form-control"
-                th:classappend="${#fields.hasErrors('stockQuantity')} ? 'is-invalid' : ''" placeholder="0" />
-              <div class="invalid-feedback" th:if="${#fields.hasErrors('stockQuantity')}" th:errors="*{stockQuantity}">
+            <div class="row g-2 mb-compact">
+              <div class="col-6">
+                <label class="form-label">Price *</label>
+                <input type="number" th:field="*{price}" class="form-control form-control-sm"
+                  th:classappend="${#fields.hasErrors('price')} ? 'is-invalid' : ''" step="0.01" placeholder="0.00" />
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></div>
               </div>
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label">Image URL</label>
-              <input type="text" th:field="*{imageUrl}" class="form-control" placeholder="https://... (optional)" />
+              <div class="col-6">
+                <label class="form-label">Stock *</label>
+                <input type="number" th:field="*{stockQuantity}" class="form-control form-control-sm"
+                  th:classappend="${#fields.hasErrors('stockQuantity')} ? 'is-invalid' : ''" placeholder="0" />
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('stockQuantity')}"
+                  th:errors="*{stockQuantity}"></div>
+              </div>
             </div>
 
             <!-- Category Dropdown -->
             <div class="mb-4">
               <label class="form-label">Category *</label>
-              <select name="categoryId" class="form-select" required>
+              <select name="categoryId" class="form-select form-select-sm" required>
                 <option value="">— Select Category —</option>
-
                 <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.name}">
                 </option>
-
               </select>
             </div>
 
-            <button type="submit" class="btn btn-accent w-100">
+            <button type="submit" class="btn btn-accent w-100 py-2">
               <i class="bi bi-plus-lg me-2"></i>Add Product
             </button>
-
           </form>
         </div>
       </div>
@@ -526,13 +537,13 @@
                     <!-- ID -->
                     <td><span class="id-badge" th:text="${prod.id}"></span></td>
 
-                    <!-- Image Thumbnail — shows image if URL exists, icon if not -->
+                    <!-- Image Thumbnail — fallback to default image if error or missing -->
                     <td>
                       <img th:if="${prod.imageUrl != null and !prod.imageUrl.isEmpty()}" th:src="${prod.imageUrl}"
-                        class="img-thumb" alt="product image" />
-                      <div th:if="${prod.imageUrl == null or prod.imageUrl.isEmpty()}" class="img-placeholder">
-                        <i class="bi bi-image"></i>
-                      </div>
+                        class="img-thumb" alt="product" th:attr="onerror='this.src=\'' + ${defaultImageUrl} + '\''" />
+
+                      <img th:if="${prod.imageUrl == null or prod.imageUrl.isEmpty()}" th:src="${defaultImageUrl}"
+                        class="img-thumb" alt="default" />
                     </td>
 
                     <!-- Name -->
