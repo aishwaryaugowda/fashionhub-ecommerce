@@ -38,8 +38,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        // Allow login page, static assets publicly
-                        .requestMatchers("/login", "/css/**", "/js/**", "/images/**").permitAll()
+                        // Allow public pages: home, shop, product details, login, static assets
+                        .requestMatchers("/", "/home", "/shop", "/product/**", "/login", "/css/**", "/js/**", "/images/**").permitAll()
                         // Everything else requires authentication
                         .anyRequest().authenticated())
                 .formLogin(form -> form

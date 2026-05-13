@@ -26,12 +26,6 @@ public class DashboardController {
         return "auth/login";
     }
 
-    // ─── GET / → redirect to /dashboard ─────────────────────────────
-    @GetMapping("/")
-    public String home() {
-        return "redirect:/dashboard";
-    }
-
     // ─── GET /dashboard ──────────────────────────────────────────────
     @GetMapping("/dashboard")
     public String dashboard(Model model) {
